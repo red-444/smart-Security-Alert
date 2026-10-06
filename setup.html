@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CampusEye – Connect ESP32</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="w"><h1>Connect your ESP32</h1>
+<div class="c"><h3>Steps</h3><p>1. Open <code>campuseye_wifi.ino</code> and set your WiFi name, password and control PIN.<br>2. Upload it, then open Serial Monitor at 115200 baud and note the IP address it prints.<br>3. Make sure your phone/PC is on the same WiFi.<br>4. Go to the <a href="index.html">Live page</a>, enter the IP and PIN, press Save &amp; connect.</p></div>
+<h2>Important: HTTPS limitation</h2>
+<div class="c"><p>GitHub Pages uses <b>https</b>, but the ESP32 serves plain <b>http</b>. Browsers block https pages from calling http devices, so the live page will show OFFLINE there.</p></div>
+<h2>Fixes</h2><div class="g">
+<div class="c"><h3>Option A: open locally (easiest)</h3><p>Download this site folder and open <code>index.html</code> from your computer. It can reach the ESP32 on your WiFi.</p></div>
+<div class="c"><h3>Option B: MQTT (works from GitHub)</h3><p>ESP32 publishes status to an MQTT broker, and the page reads it over secure WebSockets. Ask to have this version built.</p></div></div>
+<h2>API</h2><pre>GET /status
+GET /control?cmd=arm|disarm|stop|test&amp;key=PIN</pre></div>
+<script src="app.js"></script></body></html>

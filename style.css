@@ -1,0 +1,26 @@
+:root{--bg:#f5f7fa;--card:#fff;--text:#14202e;--mute:#5d6b7a;--acc:#0a7cff;--ok:#12a150;--bad:#e5383b;--bd:#dfe4ea}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1520;--card:#162131;--text:#e8eef5;--mute:#93a3b5;--acc:#4ca3ff;--ok:#33c27a;--bad:#ff5c5f;--bd:#26364a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55}
+nav{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--bd)}
+nav b{margin-right:auto;font-size:1.15rem}nav b span{color:var(--acc)}
+nav a{color:var(--mute);text-decoration:none;padding:4px 0}nav a.on{color:var(--acc);font-weight:600}
+.w{max-width:960px;margin:0 auto;padding:16px}
+h1{margin:12px 0 4px}h2{margin:24px 0 8px}
+.mute,p.s{color:var(--mute)}
+.g{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:12px 0}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
+.c h3{margin:0 0 6px;font-size:1rem}.c p{margin:0;color:var(--mute);font-size:.93rem}
+.row{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd)}.row:last-child{border:0}
+.st{display:inline-block;padding:2px 12px;border-radius:99px;font-weight:600;font-size:.85rem;color:#fff;background:var(--mute)}
+.st.ok{background:var(--ok)}.st.bad{background:var(--bad);animation:p .6s infinite alternate}
+@keyframes p{to{opacity:.45}}
+button,input{font:inherit;border-radius:8px}
+button{border:0;padding:10px 14px;background:var(--acc);color:#fff;cursor:pointer;margin:4px 4px 0 0}
+button.o{background:var(--ok)}button.x{background:var(--bad)}
+input{border:1px solid var(--bd);padding:9px;background:var(--bg);color:var(--text);width:100%;max-width:240px;margin:4px 0}
+#log{background:#0b121b;color:#7dffa8;font:13px/1.5 ui-monospace,Consolas,monospace;padding:12px;border-radius:10px;min-height:120px;max-height:240px;overflow:auto}
+.sc{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:420px}
+td,th{border-bottom:1px solid var(--bd);padding:8px;text-align:left}
+pre{background:#0b121b;color:#dbe7f3;padding:12px;border-radius:10px;overflow-x:auto}
+footer{color:var(--mute);text-align:center;padding:24px;font-size:.85rem}

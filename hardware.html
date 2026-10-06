@@ -1,0 +1,10 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CampusEye – Hardware</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="w"><h1>Hardware</h1><div class="c sc"><table>
+<tr><th>Component</th><th>Role</th><th>ESP32 pins</th></tr>
+<tr><td>ESP32 Dev Module</td><td>Controller + WiFi</td><td>–</td></tr>
+<tr><td>RC522 RFID</td><td>Card authorization (SPI)</td><td>SS 5, RST 4, SCK 18, MOSI 23, MISO 19</td></tr>
+<tr><td>HC-SR501 PIR</td><td>Motion sensing</td><td>27</td></tr>
+<tr><td>DS3231 RTC</td><td>Timekeeping (I2C)</td><td>SDA 21, SCL 22</td></tr>
+<tr><td>LED</td><td>Alarm indicator</td><td>26</td></tr>
+<tr><td>HW-508 buzzer</td><td>Active-low: LOW = ring</td><td>16</td></tr>
+</table></div></div><script src="app.js"></script></body></html>

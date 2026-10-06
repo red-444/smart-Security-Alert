@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CampusEye – How it works</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="w"><h1>How it works</h1><p class="s">Dual-layer security: motion sensing plus RFID authorization.</p>
+<div class="g">
+<div class="c"><h3>1. Time window</h3><p>The DS3231 RTC arms monitoring from 18:00 to 07:00, including across midnight.</p></div>
+<div class="c"><h3>2. Motion detected</h3><p>The HC-SR501 PIR sensor starts a 5-second window to present an RFID card.</p></div>
+<div class="c"><h3>3. RFID check</h3><p>The RC522 reader compares the card UID with the authorized card.</p></div>
+<div class="c"><h3>4. Alarm</h3><p>No valid card: LED on and buzzer beeps for 5 seconds. Authorized card: alarm suppressed.</p></div>
+</div>
+<h2>Roadmap</h2><div class="g">
+<div class="c"><h3>Current version</h3><p>RFID + RTC + PIR + LED + buzzer + WiFi dashboard. Camera disconnected.</p></div>
+<div class="c"><h3>Planned</h3><p>ESP32-CAM photo capture and Telegram bot alerts.</p></div></div></div>
+<script src="app.js"></script></body></html>

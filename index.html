@@ -1,123 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CampusEye – ESP32 Campus Security System</title>
-<style>
-:root{--bg:#f5f7fa;--card:#fff;--text:#14202e;--mute:#5d6b7a;--acc:#0a7cff;--ok:#12a150;--bad:#e5383b;--bd:#dfe4ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1520;--card:#162131;--text:#e8eef5;--mute:#93a3b5;--acc:#4ca3ff;--ok:#33c27a;--bad:#ff5c5f;--bd:#26364a}}
-:root[data-theme="dark"]{--bg:#0d1520;--card:#162131;--text:#e8eef5;--mute:#93a3b5;--acc:#4ca3ff;--ok:#33c27a;--bad:#ff5c5f;--bd:#26364a}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
-.w{max-width:1000px;margin:0 auto;padding:16px}
-header{padding:32px 0 8px}
-h1{margin:0;font-size:2rem}h1 span{color:var(--acc)}
-p.s{color:var(--mute);margin:6px 0 0}
-.g{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:16px 0}
-.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
-.c h3{margin:0 0 6px;font-size:1rem}
-.c p{margin:0;color:var(--mute);font-size:.92rem}
-h2{margin:28px 0 4px}
-.st{display:inline-block;padding:3px 12px;border-radius:99px;font-weight:600;font-size:.85rem;color:#fff}
-.on{background:var(--ok)}.off{background:var(--mute)}.al{background:var(--bad);animation:p .6s infinite alternate}
-@keyframes p{to{opacity:.45}}
-.row{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:.95rem}
-.row:last-child{border:0}
-button{font:inherit;border:0;border-radius:8px;padding:10px 14px;background:var(--acc);color:#fff;cursor:pointer;margin:4px 4px 0 0}
-button.x{background:var(--bad)}button.o{background:var(--ok)}
-#log{background:#0b121b;color:#7dffa8;font:13px/1.5 ui-monospace,Consolas,monospace;padding:12px;border-radius:10px;height:200px;overflow:auto}
-.sc{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:420px;font-size:.92rem}
-td,th{border-bottom:1px solid var(--bd);padding:8px;text-align:left}
-footer{color:var(--mute);text-align:center;padding:28px 0;font-size:.85rem}
-</style>
-</head>
-<body>
-<div class="w">
-<header>
-<h1>Campus<span>Eye</span></h1>
-<p class="s">ESP32-based dual-layer security system for after-hours campus monitoring (PIR motion + RFID authorization)</p>
-</header>
-
-<h2>How it works</h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CampusEye – Live</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="w" id="live">
+<h1>Live dashboard</h1><p class="s">Real-time status from your ESP32 over WiFi.</p>
 <div class="g">
-<div class="c"><h3>1. Time window</h3><p>DS3231 RTC arms the system from 18:00 to 07:00, including across midnight.</p></div>
-<div class="c"><h3>2. Motion detected</h3><p>HC-SR501 PIR triggers a 5-second window to present an RFID card.</p></div>
-<div class="c"><h3>3. RFID check</h3><p>RC522 compares the card UID against the authorized card.</p></div>
-<div class="c"><h3>4. Alarm</h3><p>No valid card: LED on and active-low buzzer beeps (300 ms on/off) for 5 seconds.</p></div>
+<div class="c"><h3>Device</h3>
+<div class="row"><span>Connection</span><span id="conn" class="st">–</span></div>
+<div class="row"><span>Clock (RTC)</span><b id="clk">--:--:--</b></div>
+<div class="row"><span>Monitoring window</span><span id="mon" class="st">–</span></div>
+<div class="row"><span>System</span><span id="arm" class="st">–</span></div>
+<div class="row"><span>PIR sensor</span><span id="pir" class="st">–</span></div>
+<div class="row"><span>Alarm</span><span id="alm" class="st">–</span></div></div>
+<div class="c"><h3>Controls</h3>
+<button class="o" data-cmd="arm">Arm</button><button data-cmd="disarm">Disarm</button>
+<button class="x" data-cmd="stop">Stop alarm</button><button data-cmd="test">Test alarm</button>
+<p style="margin-top:12px">ESP32 IP address</p><input id="ip" placeholder="192.168.1.50" inputmode="decimal">
+<p>Control PIN</p><input id="key" type="password" placeholder="PIN"><br><button id="save">Save &amp; connect</button>
+<p style="margin-top:8px">First time? See <a href="setup.html">Connect ESP32</a>.</p></div>
 </div>
-
-<h2>Live dashboard (demo simulation)</h2>
-<div class="g">
-<div class="c">
-<h3>System status</h3>
-<div class="row"><span>Clock</span><b id="clk">--:--:--</b></div>
-<div class="row"><span>Monitoring</span><span id="mon" class="st off">INACTIVE</span></div>
-<div class="row"><span>PIR</span><b id="pir">NO MOTION</b></div>
-<div class="row"><span>Alarm</span><span id="alm" class="st off">OFF</span></div>
-<div class="row"><span>RFID window</span><b id="win">–</b></div>
-</div>
-<div class="c">
-<h3>Simulate events</h3>
-<p>Demo only – real values come from the ESP32.</p>
-<button id="b1">Trigger motion</button>
-<button id="b2" class="o">Scan authorized card</button>
-<button id="b3" class="x">Scan unknown card</button>
-<br>
-<label style="font-size:.9rem;color:var(--mute)"><input type="checkbox" id="force" checked> Force monitoring ON (ignore time)</label>
-</div>
-</div>
-<div id="log"></div>
-
-<h2>Hardware</h2>
-<div class="c sc">
-<table>
-<tr><th>Component</th><th>Role</th><th>ESP32 pin</th></tr>
-<tr><td>RC522 RFID</td><td>Card authorization (SPI)</td><td>SS 5, RST 4, SCK 18, MOSI 23, MISO 19</td></tr>
-<tr><td>HC-SR501 PIR</td><td>Motion sensing</td><td>27</td></tr>
-<tr><td>DS3231 RTC</td><td>Timekeeping (I2C)</td><td>SDA 21, SCL 22</td></tr>
-<tr><td>LED</td><td>Alarm indicator</td><td>26</td></tr>
-<tr><td>HW-508 buzzer</td><td>Active-low: LOW = ring</td><td>16</td></tr>
-</table>
-</div>
-
-<h2>Status</h2>
-<div class="g">
-<div class="c"><h3>Current version</h3><p>RFID + RTC + PIR + LED + buzzer. Camera is disconnected in this build.</p></div>
-<div class="c"><h3>Planned</h3><p>ESP32-CAM photo capture and Telegram bot alerts over WiFi.</p></div>
-</div>
-<footer>CampusEye · Mini project 24CA3301</footer>
-</div>
-
-<script>
-const $=id=>document.getElementById(id);
-let alarm=false,winEnd=0,alarmStart=0,motion=false,motionTimer;
-function log(m){const d=new Date().toLocaleTimeString();$('log').innerHTML+=`[${d}] ${m}<br>`;$('log').scrollTop=1e9}
-function isMon(n){const m=n.getHours()*60+n.getMinutes();return m>=1080||m<420}
-function setMon(on){$('mon').textContent=on?'ACTIVE':'INACTIVE';$('mon').className='st '+(on?'on':'off')}
-function setAlarm(a){alarm=a;$('alm').textContent=a?'ALARM!':'OFF';$('alm').className='st '+(a?'al':'off');if(a)alarmStart=Date.now()}
-function active(){return $('force').checked||isMon(new Date())}
-$('b1').onclick=()=>{
- if(!active()){log('Motion ignored: outside monitoring hours');return}
- if(alarm||winEnd)return;
- motion=true;$('pir').textContent='MOTION';winEnd=Date.now()+5000;
- log('MOTION DETECTED – waiting 5 s for authorized RFID...');
- clearTimeout(motionTimer);
- motionTimer=setTimeout(()=>{$('pir').textContent='NO MOTION';motion=false;
-  if(winEnd){winEnd=0;log('UNAUTHORIZED ACCESS – starting alarm');setAlarm(true)}},5000)};
-$('b2').onclick=()=>{
- if(!winEnd){log('RFID: C7 8D B7 31 (no motion pending)');return}
- log('RFID: C7 8D B7 31 – AUTHORIZED. Alarm suppressed.');winEnd=0;clearTimeout(motionTimer);$('pir').textContent='NO MOTION'};
-$('b3').onclick=()=>log('RFID: UNAUTHORIZED CARD'+(winEnd?' – window still open':''));
-setInterval(()=>{
- const n=new Date();$('clk').textContent=n.toLocaleTimeString();
- setMon(active());
- $('win').textContent=winEnd?Math.max(0,((winEnd-Date.now())/1000)).toFixed(1)+' s':'–';
- if(alarm&&Date.now()-alarmStart>=5000){setAlarm(false);log('Alarm automatically stopped')}
-},200);
-log('System ready. Monitoring window 18:00 → 07:00');
-</script>
-</body>
-</html>
+<h2>Event log</h2><div id="log">Waiting for device...</div>
+</div><script src="app.js"></script></body></html>
